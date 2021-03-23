@@ -7,21 +7,11 @@
 }
 
 @section Styles{
-    <link rel="stylesheet"
-          data-name="vs/editor/editor.main" href="~/lib/monaco-editor/min/vs/editor/editor.main.css" />
-    <style>
-			/* We must define the font face outside the shadowroot */
-        @@font-face {
-            font-family: 'codicon';
-            src: url('~/lib/monaco-editor/min/vs/base/browser/ui/codicons/codicon/codicon.ttf')
-                 format('truetype');
-        }
-    </style>
+   
 }
 
-<span id="compare"></span>
-<div id="container" style="min-height: 600px; border: 1px solid grey"></div>
-<div id="diffContainer" class="none" style="min-height: 600px; border: 1px solid grey"></div>
+<span id="compare">Compare to version: </span>
+<div id="container" style="min-height: 600px; border: 1px solid grey"></div> 
 
 @section Scripts{
     <script>
@@ -30,7 +20,7 @@
         };
     </script>
     <script src="~/lib/monaco-editor/min/vs/loader.js"></script>
-    <script src="~/lib/monaco-editor/min/vs/editor/editor.main.nls.min.js"></script>
+    @*<script src="~/lib/monaco-editor/min/vs/editor/editor.main.nls.min.js"></script>*@
     <script src="~/lib/monaco-editor/min/vs/editor/editor.main.js"></script>
  
     <script>
@@ -80,24 +70,9 @@
                             select.onchange = (e) => {
                                 var version = e.srcElement.options[e.srcElement.selectedIndex].value;
                                 console.log(version);
-                                var url =
-                                    '@Url.Action("GetLatestSchema", "Schemas", new {groupId = Model.SchemaGroupId, schemaId = Model.Id})';
-                                fetch(url + '/versions/' + version)
-                                    .then(data => {
-                                        data.text().then(contents => {
-                                            compareModel = monaco.editor.createModel(
-                                                contents,
-                                                '@lang'
-                                            );
-
-                                            diff = monaco.editor.createDiffEditor(
-                                                document.getElementById('diffContainer'));
-                                            diff.setModel({
-                                                original: compareModel,
-                                                modified: currentModel
-                                            });
-                                        });
-                                    });
+                                window.location =
+                                    '/home/diff/@Model.SchemaGroupId?schemaid=@Model.Id&version=@Model.Version&previousVersion=' +
+                                    version;
                             };
                             for (var i = 0; i < arr.length; i++) {
                                 var opt = document.createElement("option");
