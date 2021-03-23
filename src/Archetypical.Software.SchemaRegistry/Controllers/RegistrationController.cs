@@ -70,12 +70,12 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
                                join sch in _context.Schemata on gr.Id equals sch.SchemaGroupId into parent
                                from child in parent.DefaultIfEmpty()
                                where gr.Id == groupId
-                               select new { gr.Format, child.Version, child.Hash }).ToListAsync();
+                               select new { gr.Format, childFormat = child.Format, child.Version, child.Hash }).ToListAsync();
             if (group?.Any() == false)
                 return NotFound();
 
             var any = group.First();
-            var validator = _validators.FirstOrDefault(x => x.SchemaFormat == any.Format);
+            var validator = _validators.FirstOrDefault(x => x.SchemaFormat == (any.Format ?? any.childFormat));
             if (validator == null)
                 return Problem($"Invalid schema format {any.Format}");
 
@@ -91,6 +91,7 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
                 Contents = body,
                 CreateDateTimeUtc = DateTime.UtcNow,
                 Id = schemaId,
+                Format = (any.Format ?? any.childFormat),
                 LastUpdateDateTimeUtc = DateTime.UtcNow,
                 SchemaGroupId = groupId,
                 Version = 1

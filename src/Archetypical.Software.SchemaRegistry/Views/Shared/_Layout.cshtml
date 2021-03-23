@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - Archetypical.Software.SchemaRegistry</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    @RenderSection("Styles", false)
 </head>
 <body>
     <header>
@@ -26,9 +27,10 @@
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-action="Logout" asp-controller="Home">@User.Identity.Name - Logout</a>
-            </li>}
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-action="Logout" asp-controller="Home">@User.Identity.Name - Logout</a>
+                            </li>
+}
                     </ul>
                 </div>
             </div>

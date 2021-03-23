@@ -1,0 +1,137 @@
+@using Archetypical.Software.SchemaRegistry.Shared.Enums
+@model Archetypical.Software.SchemaRegistry.Shared.Models.Schema;
+@{
+
+    ViewData["Title"] = $"{Model.Id} -v{Model.Version}";
+
+}
+
+@section Styles{
+    <link rel="stylesheet"
+          data-name="vs/editor/editor.main" href="~/lib/monaco-editor/min/vs/editor/editor.main.css" />
+    <style>
+			/* We must define the font face outside the shadowroot */
+        @@font-face {
+            font-family: 'codicon';
+            src: url('~/lib/monaco-editor/min/vs/base/browser/ui/codicons/codicon/codicon.ttf')
+                 format('truetype');
+        }
+    </style>
+}
+
+<span id="compare"></span>
+<div id="container" style="min-height: 600px; border: 1px solid grey"></div>
+<div id="diffContainer" class="none" style="min-height: 600px; border: 1px solid grey"></div>
+
+@section Scripts{
+    <script>
+        var require = {
+            paths: { vs: '/lib/monaco-editor/min/vs' } 
+        };
+    </script>
+    <script src="~/lib/monaco-editor/min/vs/loader.js"></script>
+    <script src="~/lib/monaco-editor/min/vs/editor/editor.main.nls.min.js"></script>
+    <script src="~/lib/monaco-editor/min/vs/editor/editor.main.js"></script>
+ 
+    <script>
+        @{
+                    var lang = "json";
+                    switch (Model.Format)
+                    {
+                        case Format.JsonSchema:
+                        case Format.Avro:
+                            lang = "json";
+                            break;
+                        case Format.XSD:
+                            lang = "xml";
+                            break;
+                        case Format.ProtoV2:
+                            break;
+                        case Format.ProtoV3:
+                            break;
+                        case Format.WSDL:
+                            break;
+                        case Format.OpenApi:
+                            break;
+                        case null:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+        var editor = null;
+        var diff = null;
+        var currentModel = null;
+        var compareModel = null;
+
+        fetch('@Url.Action("GetSchemaVersions", "Versions", new {groupId = Model.SchemaGroupId, schemaid = Model.Id})')
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(arr => {
+                        var current = @Model.Version;
+                        var index = arr.indexOf(current);
+                        arr.splice(index, 1);
+
+                        if (arr.length > 0) {
+                            var select = document.createElement("select");
+                            var def = document.createElement("option");
+                            def.selected = true;
+                            select.appendChild(def);
+                            select.onchange = (e) => {
+                                var version = e.srcElement.options[e.srcElement.selectedIndex].value;
+                                console.log(version);
+                                var url =
+                                    '@Url.Action("GetLatestSchema", "Schemas", new {groupId = Model.SchemaGroupId, schemaId = Model.Id})';
+                                fetch(url + '/versions/' + version)
+                                    .then(data => {
+                                        data.text().then(contents => {
+                                            compareModel = monaco.editor.createModel(
+                                                contents,
+                                                '@lang'
+                                            );
+
+                                            diff = monaco.editor.createDiffEditor(
+                                                document.getElementById('diffContainer'));
+                                            diff.setModel({
+                                                original: compareModel,
+                                                modified: currentModel
+                                            });
+                                        });
+                                    });
+                            };
+                            for (var i = 0; i < arr.length; i++) {
+                                var opt = document.createElement("option");
+                                opt.value = arr[i];
+                                opt.innerText = arr[i];
+                                select.add(opt);
+                            }
+                            document.getElementById("compare").appendChild(select);
+                        }
+
+                    });
+                }
+            });
+        
+        fetch(
+                '@Url.Action("GetSchemaVersion", "Versions", new {groupId = Model.SchemaGroupId, schemaId = Model.Id, versionnumber = Model.Version})')
+            .then(data => {
+
+               
+
+                data.text()
+                    .then(contents => {
+                        currentModel = monaco.editor.createModel(
+                            contents,
+                            '@lang'
+                        );
+                        editor = monaco.editor.create(document.getElementById('container'),
+                            {
+                                readOnly: true,
+                                scrollBeyondLastLine: false
+                            });
+                        editor.setModel(currentModel);
+                        setTimeout(() => { editor.getAction('editor.action.formatDocument').run(); }, 500);
+                    });
+            });
+    </script>
+}

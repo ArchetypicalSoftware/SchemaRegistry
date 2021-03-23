@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using Archetypical.Software.SchemaRegistry.Shared.Enums;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Archetypical.Software.SchemaRegistry.Shared.Interfaces
 {
     public interface ISchemaValidator
     {
-        string SchemaFormat { get; }
+        Format SchemaFormat { get; }
         string ContentType { get; }
 
         ValidationResult Validate(string schema);

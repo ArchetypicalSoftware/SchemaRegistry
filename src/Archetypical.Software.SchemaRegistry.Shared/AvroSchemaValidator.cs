@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Archetypical.Software.SchemaRegistry.Shared.Enums;
 using Avro;
 using Archetypical.Software.SchemaRegistry.Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -7,7 +8,7 @@ namespace Archetypical.Software.SchemaRegistry.Shared
 {
     public class AvroSchemaValidator : ISchemaValidator
     {
-        public string SchemaFormat { get; } = "avro";
+        public Format SchemaFormat { get; } = Format.Avro;
 
         public string ContentType { get; } = "text/json";
 

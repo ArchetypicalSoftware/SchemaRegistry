@@ -4,23 +4,63 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Archetypical.Software.SchemaRegistry.Models;
+using Archetypical.Software.SchemaRegistry.Shared.Data;
+using Archetypical.Software.SchemaRegistry.Shared.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Archetypical.Software.SchemaRegistry.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly Context _context;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(Context context, ILogger<HomeController> logger)
         {
+            _context = context;
             _logger = logger;
         }
 
-        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
+        }
+
+        public async Task<IActionResult> Schema(string id, string schemaId, int? version)
+        {
+            Schema model = null;
+            if (version.HasValue)
+            {
+                model = await _context.Schemata.FirstOrDefaultAsync(x =>
+                    x.SchemaGroupId == id && x.Id == schemaId && x.Version == version);
+            }
+            else
+            {
+                model = await _context.Schemata.Where(x =>
+                        x.SchemaGroupId == id && x.Id == schemaId)
+                    .OrderByDescending(x => x.Version)
+                    .FirstOrDefaultAsync();
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> Diff(string id, string schemaId, int version, int previousVersion)
+        {
+            var model = await _context.Schemata
+                .Where(x => x.SchemaGroupId == id && x.Id == schemaId && x.Version == version)
+                .Select(x => x.Format)
+                .FirstOrDefaultAsync();
+            return View(new DiffModel
+            {
+                GroupId = id,
+                SchemaId = schemaId,
+                Format = model.GetValueOrDefault(),
+                Version = version,
+                PreviousVersion = previousVersion
+            });
         }
 
         public IActionResult Privacy()

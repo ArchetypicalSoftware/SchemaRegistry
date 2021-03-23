@@ -15,6 +15,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Archetypical.Software.SchemaRegistry.Shared.Enums;
 
 namespace Archetypical.Software.SchemaRegistry.Shared.Models
 {
@@ -52,7 +53,7 @@ namespace Archetypical.Software.SchemaRegistry.Shared.Models
         /// Gets or Sets Format
         /// </summary>
         [DataMember(Name = "format")]
-        public string Format { get; set; }
+        public Format? Format { get; set; }
 
         /// <summary>
         /// Gets or Sets GroupProperties

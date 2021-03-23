@@ -1,12 +1,13 @@
 using System.ComponentModel.DataAnnotations;
-using Json.Schema;
 using Archetypical.Software.SchemaRegistry.Shared.Interfaces;
+using Json.Schema;
+using Format = Archetypical.Software.SchemaRegistry.Shared.Enums.Format;
 
 namespace Archetypical.Software.SchemaRegistry.Shared
 {
     public class JsonSchemaValidator : ISchemaValidator
     {
-        public string SchemaFormat { get; } = "json-schema";
+        public Format SchemaFormat { get; } = Format.JsonSchema;
         public string ContentType { get; } = "text/json";
 
         public ValidationResult Validate(string schema)
