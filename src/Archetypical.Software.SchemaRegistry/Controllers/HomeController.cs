@@ -24,9 +24,15 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? page, int? size)
         {
-            return View();
+            var groups = await _context
+                .SchemaGroups
+                .OrderBy(x => x.Id)
+                .Skip(page.GetValueOrDefault(0) * size.GetValueOrDefault(10))
+                .Take(size.GetValueOrDefault(10)).ToListAsync();
+
+            return View(groups);
         }
 
         public async Task<IActionResult> Schema(string id, string schemaId, int? version)
