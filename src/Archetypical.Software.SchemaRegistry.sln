@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{B00A30E2-7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Archetypical.Software.SchemaRegistry.Data.Sqlite", "Archetypical.Software.SchemaRegistry.Data.Sqlite\Archetypical.Software.SchemaRegistry.Data.Sqlite.csproj", "{A93D6FC7-8A2E-4F77-BD9B-04CC296DEB07}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Archetypical.Software.SchemaRegistry.Data.Cosmos", "Archetypical.Software.SchemaRegistry.Data.Cosmos\Archetypical.Software.SchemaRegistry.Data.Cosmos.csproj", "{98FC880F-BBE9-4198-A0F8-AA0542CBC287}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,12 +37,17 @@ Global
 		{A93D6FC7-8A2E-4F77-BD9B-04CC296DEB07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A93D6FC7-8A2E-4F77-BD9B-04CC296DEB07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A93D6FC7-8A2E-4F77-BD9B-04CC296DEB07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98FC880F-BBE9-4198-A0F8-AA0542CBC287}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98FC880F-BBE9-4198-A0F8-AA0542CBC287}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98FC880F-BBE9-4198-A0F8-AA0542CBC287}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98FC880F-BBE9-4198-A0F8-AA0542CBC287}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A93D6FC7-8A2E-4F77-BD9B-04CC296DEB07} = {B00A30E2-7D08-4940-A82F-A0797802604B}
+		{98FC880F-BBE9-4198-A0F8-AA0542CBC287} = {B00A30E2-7D08-4940-A82F-A0797802604B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6DAD5B53-0CE3-4E38-B470-D979722D48C7}

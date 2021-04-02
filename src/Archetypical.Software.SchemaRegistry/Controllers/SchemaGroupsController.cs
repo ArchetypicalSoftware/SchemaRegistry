@@ -48,7 +48,7 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
         [SwaggerOperation("CreateGroup")]
         public async Task<IActionResult> CreateGroup([FromBody] SchemaGroup body, [FromRoute][Required] string groupId)
         {
-            if (_context.SchemaGroups.Any(x => x.Id == groupId))
+            if (_context.SchemaGroups.Where(x => x.Id == groupId).Select(x => true).FirstOrDefault())
                 return StatusCode(409);
             if (!ModelState.IsValid)
                 return ValidationProblem(ModelState);
@@ -78,9 +78,14 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
         [SwaggerOperation("DeleteGroup")]
         public virtual async Task<IActionResult> DeleteGroup([FromRoute][Required] string groupId)
         {
-            var group = await _context.SchemaGroups.Include(x => x.Schemas).FirstOrDefaultAsync(x => x.Id == groupId);
+            var group = await _context
+                .SchemaGroups
+                .FirstOrDefaultAsync(x => x.Id == groupId);
             if (group == null)
                 return NotFound();
+
+            group.Schemas = (await _context.Schemata.Where(x => x.SchemaGroupId == group.Id).ToListAsync());
+
             foreach (var groupSchema in group.Schemas)
             {
                 _context.Schemata.Remove(groupSchema);
@@ -103,9 +108,14 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
         [SwaggerOperation("DeleteSchemasByGroup")]
         public virtual async Task<IActionResult> DeleteSchemasByGroup([FromRoute][Required] string groupId)
         {
-            var group = await _context.SchemaGroups.Include(x => x.Schemas).FirstOrDefaultAsync(x => x.Id == groupId);
+            var group = await _context
+                .SchemaGroups
+                .FirstOrDefaultAsync(x => x.Id == groupId);
             if (group == null)
                 return NotFound();
+
+            group.Schemas = (await _context.Schemata.Where(x => x.SchemaGroupId == group.Id).ToListAsync());
+
             foreach (var groupSchema in group.Schemas)
             {
                 _context.Schemata.Remove(groupSchema);
@@ -165,10 +175,13 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(List<string>), description: "OK")]
         public virtual async Task<IActionResult> GetSchemasByGroup([FromRoute][Required] string groupId)
         {
-            var group = await _context.SchemaGroups.Include(x => x.Schemas).FirstOrDefaultAsync(x => x.Id == groupId);
+            var group = await _context
+                .SchemaGroups
+                .FirstOrDefaultAsync(x => x.Id == groupId);
             if (group == null)
                 return NotFound();
 
+            group.Schemas = (await _context.Schemata.Where(x => x.SchemaGroupId == group.Id).ToListAsync());
             return Ok(group.Schemas.GroupBy(x => x.Id).Select(x => x.Key).OrderBy(x => x));
         }
     }

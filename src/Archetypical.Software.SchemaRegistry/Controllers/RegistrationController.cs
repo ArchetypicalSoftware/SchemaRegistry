@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using Archetypical.Software.SchemaRegistry.Attributes;
 using Archetypical.Software.SchemaRegistry.Models;
 using Archetypical.Software.SchemaRegistry.Shared.Data;
+using Archetypical.Software.SchemaRegistry.Shared.Enums;
 using Archetypical.Software.SchemaRegistry.Shared.Interfaces;
 using Archetypical.Software.SchemaRegistry.Shared.Models;
 using Microsoft.EntityFrameworkCore;
@@ -66,16 +67,18 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
             if (!ModelState.IsValid)
                 return ValidationProblem(ModelState);
 
-            var group = await (from gr in _context.SchemaGroups
-                               join sch in _context.Schemata on gr.Id equals sch.SchemaGroupId into parent
-                               from child in parent.DefaultIfEmpty()
-                               where gr.Id == groupId
-                               select new { gr.Format, childFormat = child.Format, child.Version, child.Hash }).ToListAsync();
-            if (group?.Any() == false)
+            var gr = _context.SchemaGroups.FirstOrDefault(x => x.Id == groupId);
+            if (gr == null)
                 return NotFound();
 
-            var any = group.First();
-            var validator = _validators.FirstOrDefault(x => x.SchemaFormat == (any.Format ?? any.childFormat));
+            var schemas = _context.Schemata.Where(x => x.SchemaGroupId == groupId).ToList()
+                .Select(child => new InnerProjection { Format = gr.Format, ChildFormat = child.Format, Version = child.Version, Hash = child.Hash }).ToList();
+
+            if (!schemas.Any())
+                schemas.Add(new InnerProjection { Format = gr.Format });
+
+            var any = schemas.First();
+            var validator = _validators.FirstOrDefault(x => x.SchemaFormat == (any.Format ?? any.ChildFormat));
             if (validator == null)
                 return Problem($"Invalid schema format {any.Format}");
 
@@ -91,14 +94,14 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
                 Contents = body,
                 CreateDateTimeUtc = DateTime.UtcNow,
                 Id = schemaId,
-                Format = (any.Format ?? any.childFormat),
+                Format = (any.Format ?? any.ChildFormat),
                 LastUpdateDateTimeUtc = DateTime.UtcNow,
                 SchemaGroupId = groupId,
                 Version = 1
             };
 
             // get the latest schema
-            var latest = group.OrderByDescending(x => x.Version).First();
+            var latest = schemas.OrderByDescending(x => x.Version).First();
 
             // check for duplicates
             if (schema.Hash != latest.Hash)

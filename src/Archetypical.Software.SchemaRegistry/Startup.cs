@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Archetypical.Software.SchemaRegistry.Data.Cosmos;
 using Archetypical.Software.SchemaRegistry.Data.Sqlite;
 using Archetypical.Software.SchemaRegistry.Filters;
 using Microsoft.AspNetCore.Builder;
@@ -37,7 +38,8 @@ namespace Archetypical.Software.SchemaRegistry
 #endif
                 ;
 
-            services.AddSqlite();
+            //services.AddSqlite();
+            services.AddCosmos(Configuration);
             services
                 .AddTransient<ISchemaValidator, JsonSchemaValidator>()
                 .AddTransient<ISchemaValidator, AvroSchemaValidator>()

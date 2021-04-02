@@ -14,6 +14,7 @@
     <Product>Archetypical Software Schema Registry</Product>
     <Description>API for storing, organizing, and accessing schema documents for use with serialization and data validation frameworks such as Apache Avro and JSON Schema</Description>
     <Copyright>$([System.DateTime]::Now.ToString(yyyy)) Archetypical Software</Copyright>
+    <UserSecretsId>734b1b57-083a-4612-9fb7-830a3cad2fbd</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -140,6 +141,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Archetypical.Software.SchemaRegistry.Data.Cosmos\Archetypical.Software.SchemaRegistry.Data.Cosmos.csproj" />
     <ProjectReference Include="..\Archetypical.Software.SchemaRegistry.Data.Sqlite\Archetypical.Software.SchemaRegistry.Data.Sqlite.csproj" />
     <ProjectReference Include="..\Archetypical.Software.SchemaRegistry.Shared\Archetypical.Software.SchemaRegistry.Shared.csproj" />
   </ItemGroup>
