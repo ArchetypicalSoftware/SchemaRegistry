@@ -53,4 +53,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Archetypical.Software.SchemaRegistry\Archetypical.Software.SchemaRegistry.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SharedTests\valid-proto-3.proto">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

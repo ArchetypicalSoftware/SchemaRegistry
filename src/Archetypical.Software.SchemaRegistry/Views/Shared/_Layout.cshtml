@@ -1,3 +1,5 @@
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Config;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +9,7 @@
     <link href="https://unpkg.com/tailwindcss@@^2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" />
     @RenderSection("Styles", false)
+    <script data-ad-client="@Config["AdSense:data-ad-client"]" async src="@Config["AdSense:src"]"></script>
 </head>
 <body>
 

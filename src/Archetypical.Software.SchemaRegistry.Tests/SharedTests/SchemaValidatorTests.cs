@@ -46,9 +46,10 @@ namespace Archetypical.Software.SchemaRegistry.Tests.SharedTests
         [InlineData("valid-avro-schema.json", "avro")]
         [InlineData("valid-json-schema.json", "json")]
         [InlineData("valid-xsd-schema.xsd", "xsd")]
+        [InlineData("valid-proto-3.proto", "proto3")]
         public async Task Valid_Schema_Passes_Validation(string file, string validator)
         {
-            var contents = await File.ReadAllTextAsync(@$"C:\projects\Archetypical.Software.SchemaRegistry\src\Archetypical.Software.SchemaRegistry.Tests\SharedTests\{file}");
+            var contents = await File.ReadAllTextAsync($"SharedTests\\{file}");
 
             ISchemaValidator schemavalidator = null;
             switch (validator)
@@ -63,6 +64,10 @@ namespace Archetypical.Software.SchemaRegistry.Tests.SharedTests
 
                 case "xsd":
                     schemavalidator = new XsdSchemaValidator();
+                    break;
+
+                case "proto3":
+                    schemavalidator = new Proto3SchemaValidator();
                     break;
             }
             var result = schemavalidator.Validate(contents);
