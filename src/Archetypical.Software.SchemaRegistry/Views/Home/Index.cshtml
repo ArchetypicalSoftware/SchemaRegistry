@@ -18,7 +18,7 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Properties
                             </th>
-                           
+
                             <th scope="col" class="px-6 py-3">
                                 <span class="sr-only">Edit</span>
                             </th>
@@ -44,9 +44,11 @@
                                     friendly = "XML Schema";
                                     icon = "xml";
                                     break;
-                                case Format.ProtoV2:
+                                case Format.Proto2:
                                     break;
-                                case Format.ProtoV3:
+                                case Format.Proto3:
+                                    friendly = "Protocol buffer definitions";
+                                    icon = "protobuf";
                                     break;
                                 case Format.WSDL:
                                     break;
@@ -60,7 +62,7 @@
                                     throw new ArgumentOutOfRangeException();
                             }
 
-                                <tr>
+                            <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-10 w-10">
@@ -80,12 +82,12 @@
                                     <div class="text-sm text-gray-900">@schemaGroup.Description</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                   @foreach (var kvp in schemaGroup.GroupProperties)
-                                   {
-                                       <div class="text-sm text-gray-900">@kvp.Key:@kvp.Value</div>
-                                   }
+                                    @foreach (var kvp in schemaGroup.GroupProperties)
+                                    {
+                                        <div class="text-sm text-gray-900">@kvp.Key:@kvp.Value</div>
+                                    }
                                 </td>
-                                
+
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                 </td>

@@ -38,11 +38,12 @@ namespace Archetypical.Software.SchemaRegistry
 #endif
                 ;
 
-            //services.AddSqlite();
-            services.AddCosmos(Configuration);
+            services.AddSqlite();
+            //services.AddCosmos(Configuration);
             services
                 .AddTransient<ISchemaValidator, JsonSchemaValidator>()
                 .AddTransient<ISchemaValidator, AvroSchemaValidator>()
+                .AddTransient<ISchemaValidator, Proto3SchemaValidator>()
                 .AddTransient<ISchemaValidator, XsdSchemaValidator>();
 
             services

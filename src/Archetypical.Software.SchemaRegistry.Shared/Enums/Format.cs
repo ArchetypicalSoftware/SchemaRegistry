@@ -11,8 +11,8 @@ namespace Archetypical.Software.SchemaRegistry.Shared.Enums
 
         Avro,
         XSD,
-        ProtoV2,
-        ProtoV3,
+        Proto2,
+        Proto3,
         WSDL,
         OpenApi
     }

@@ -7,22 +7,22 @@
 }
 
 @section Styles{
-   
+
 }
 
 <span id="compare">Compare to version: </span>
-<div id="container" style="min-height: 600px; border: 1px solid grey"></div> 
+<div id="container" style="min-height: 600px; border: 1px solid grey"></div>
 
 @section Scripts{
     <script>
         var require = {
-            paths: { vs: '/lib/monaco-editor/min/vs' } 
+            paths: { vs: '/lib/monaco-editor/min/vs' }
         };
     </script>
     <script src="~/lib/monaco-editor/min/vs/loader.js"></script>
     @*<script src="~/lib/monaco-editor/min/vs/editor/editor.main.nls.min.js"></script>*@
     <script src="~/lib/monaco-editor/min/vs/editor/editor.main.js"></script>
- 
+
     <script>
         @{
                     var lang = "json";
@@ -35,9 +35,9 @@
                         case Format.XSD:
                             lang = "xml";
                             break;
-                        case Format.ProtoV2:
+                        case Format.Proto2:
                             break;
-                        case Format.ProtoV3:
+                        case Format.Proto3:
                             break;
                         case Format.WSDL:
                             break;
@@ -86,12 +86,10 @@
                     });
                 }
             });
-        
+
         fetch(
                 '@Url.Action("GetSchemaVersion", "Versions", new {groupId = Model.SchemaGroupId, schemaId = Model.Id, versionnumber = Model.Version})')
             .then(data => {
-
-               
 
                 data.text()
                     .then(contents => {
