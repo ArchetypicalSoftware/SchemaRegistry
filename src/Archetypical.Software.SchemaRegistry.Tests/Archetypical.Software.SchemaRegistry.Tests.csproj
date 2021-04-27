@@ -9,13 +9,26 @@
   <ItemGroup>
     <None Remove="SharedTests\invalid-avro-schema.json" />
     <None Remove="SharedTests\invalid-json-schema.json" />
+    <None Remove="SharedTests\invalid-openapi-schema.json" />
+    <None Remove="SharedTests\invalid-openapi-schema.yaml" />
     <None Remove="SharedTests\invalid-xsd-schema.xsd" />
     <None Remove="SharedTests\valid-avro-schema.json" />
     <None Remove="SharedTests\valid-json-schema.json" />
+    <None Remove="SharedTests\valid-openapi-schema.json" />
+    <None Remove="SharedTests\valid-openapi-schema.yaml" />
     <None Remove="SharedTests\valid-xsd-schema.xsd" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="SharedTests\invalid-openapi-schema.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SharedTests\valid-openapi-schema.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SharedTests\invalid-openapi-schema.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="SharedTests\valid-avro-schema.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -23,6 +36,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SharedTests\invalid-xsd-schema.xsd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SharedTests\valid-openapi-schema.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SharedTests\valid-xsd-schema.xsd">

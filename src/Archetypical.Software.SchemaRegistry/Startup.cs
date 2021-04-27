@@ -44,6 +44,7 @@ namespace Archetypical.Software.SchemaRegistry
                 .AddTransient<ISchemaValidator, JsonSchemaValidator>()
                 .AddTransient<ISchemaValidator, AvroSchemaValidator>()
                 .AddTransient<ISchemaValidator, Proto3SchemaValidator>()
+                .AddTransient<ISchemaValidator, OpenApiSchemaValidator>()
                 .AddTransient<ISchemaValidator, XsdSchemaValidator>();
 
             services

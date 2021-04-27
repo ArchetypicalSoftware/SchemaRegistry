@@ -19,6 +19,8 @@ namespace Archetypical.Software.SchemaRegistry.Tests.SharedTests
         [InlineData("invalid-json-schema.json", "json")]
         [InlineData("invalid-xsd-schema.xsd", "xsd")]
         [InlineData("invalid-proto-3.proto", "proto3")]
+        [InlineData("invalid-openapi-schema.json", "openapi")]
+        [InlineData("invalid-openapi-schema.yaml", "openapi")]
         public async Task InValid_Schema_Fails_Validation(string file, string validator)
         {
             var contents = await File.ReadAllTextAsync($"SharedTests\\{file}");
@@ -41,6 +43,10 @@ namespace Archetypical.Software.SchemaRegistry.Tests.SharedTests
                 case "proto3":
                     schemavalidator = new Proto3SchemaValidator();
                     break;
+
+                case "openapi":
+                    schemavalidator = new OpenApiSchemaValidator();
+                    break;
             }
             var result = schemavalidator.Validate(contents);
 
@@ -52,6 +58,8 @@ namespace Archetypical.Software.SchemaRegistry.Tests.SharedTests
         [InlineData("valid-json-schema.json", "json")]
         [InlineData("valid-xsd-schema.xsd", "xsd")]
         [InlineData("valid-proto-3.proto", "proto3")]
+        [InlineData("valid-openapi-schema.json", "openapi")]
+        [InlineData("valid-openapi-schema.yaml", "openapi")]
         public async Task Valid_Schema_Passes_Validation(string file, string validator)
         {
             var contents = await File.ReadAllTextAsync($"SharedTests\\{file}");
@@ -73,6 +81,10 @@ namespace Archetypical.Software.SchemaRegistry.Tests.SharedTests
 
                 case "proto3":
                     schemavalidator = new Proto3SchemaValidator();
+                    break;
+
+                case "openapi":
+                    schemavalidator = new OpenApiSchemaValidator();
                     break;
             }
             var result = schemavalidator.Validate(contents);
