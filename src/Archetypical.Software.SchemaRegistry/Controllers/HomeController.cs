@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Archetypical.Software.SchemaRegistry.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly Context _context;

@@ -9,8 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Archetypical.Software.SchemaRegistry.Shared;
 using Archetypical.Software.SchemaRegistry.Shared.Interfaces;
-
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -32,12 +35,28 @@ namespace Archetypical.Software.SchemaRegistry
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
+                // Handling SameSite cookie according to https://docs.microsoft.com/en-us/aspnet/core/security/samesite?view=aspnetcore-3.1
+                options.HandleSameSiteCookieCompatibility();
+            });
+
+            // Configuration to sign-in users with Azure AD B2C
+            services.AddMicrosoftIdentityWebAppAuthentication(Configuration, "AzureAdB2C")
+                .EnableTokenAcquisitionToCallDownstreamApi()
+                .AddDistributedTokenCaches();
+
             services.AddControllersWithViews()
+                .AddMicrosoftIdentityUI()
+
 #if DEBUG
                 .AddRazorRuntimeCompilation()
 #endif
                 ;
-
+            services.AddRazorPages();
             services.AddSqlite();
             //services.AddCosmos(Configuration);
             services
@@ -70,6 +89,10 @@ namespace Archetypical.Software.SchemaRegistry
                     // Use [ValidateModelState] on Actions to actually validate it in C# as well!
                     c.OperationFilter<GeneratePathParamsValidationFilter>();
                 });
+
+            //Configuring appsettings section AzureAdB2C, into IOptions
+            services.AddOptions();
+            services.Configure<OpenIdConnectOptions>(Configuration.GetSection("AzureAdB2C"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,11 +110,11 @@ namespace Archetypical.Software.SchemaRegistry
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseCookiePolicy();
             app.UseRouting();
 
             app.UseSerilogRequestLogging();
-
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -106,6 +129,7 @@ namespace Archetypical.Software.SchemaRegistry
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
 
             #endregion snippet_route

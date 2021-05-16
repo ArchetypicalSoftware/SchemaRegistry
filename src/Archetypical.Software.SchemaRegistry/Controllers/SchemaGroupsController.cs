@@ -21,6 +21,7 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
     ///
     /// </summary>
     [ApiController]
+    [Authorize]
     public class SchemaGroupsController : ControllerBase
     {
         private readonly Context _context;
