@@ -21,7 +21,6 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
     ///
     /// </summary>
     [ApiController]
-    [Authorize]
     public class SchemaGroupsController : ControllerBase
     {
         private readonly Context _context;
@@ -54,15 +53,17 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
             if (!ModelState.IsValid)
                 return ValidationProblem(ModelState);
 
-            if (body.Id != groupId)
+            if (!string.IsNullOrWhiteSpace(body.Id) && body.Id != groupId)
                 return Problem("Group Id in payload must match route");
+
+            body.Id = groupId;
 
             if (_validators.All(x => x.SchemaFormat != body.Format))
                 return Problem(
                     $"{body.Format} schema is not supported. Valid schemas are {string.Join(",", _validators.Select(v => v.SchemaFormat))}");
 
             await _context.SchemaGroups.AddAsync(body);
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
             return Created(Url.Action("GetGroup", new { groupId }), body);
         }
 

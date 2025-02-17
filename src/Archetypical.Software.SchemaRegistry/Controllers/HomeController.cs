@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Archetypical.Software.SchemaRegistry.Controllers
 {
-    [Authorize]
+    ///TODO: [Authorize]
     public class HomeController : Controller
     {
         private readonly Context _context;
@@ -36,7 +37,8 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
             return View(groups);
         }
 
-        public async Task<IActionResult> Schema(string id, string schemaId, int? version)
+        [HttpGet("SchemaGroups/{id}/Schema/{schemaId}")]
+        public async Task<IActionResult> Schema(string id, Guid schemaId, int? version)
         {
             Schema model = null;
             if (version.HasValue)
@@ -54,7 +56,7 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Diff(string id, string schemaId, int version, int previousVersion)
+        public async Task<IActionResult> Diff(string id, Guid schemaId, int version, int previousVersion)
         {
             var model = await _context.Schemata
                 .Where(x => x.SchemaGroupId == id && x.Id == schemaId && x.Version == version)

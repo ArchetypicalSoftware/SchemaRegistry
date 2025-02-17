@@ -16,6 +16,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Archetypical.Software.SchemaRegistry.Shared.Enums;
+using Archetypical.Software.Vega.Api.Abstractions;
 
 namespace Archetypical.Software.SchemaRegistry.Shared.Models
 {
@@ -23,31 +24,19 @@ namespace Archetypical.Software.SchemaRegistry.Shared.Models
     ///
     /// </summary>
     [DataContract]
-    public partial class SchemaGroup : IEquatable<SchemaGroup>
+    public partial class SchemaGroup : GuidKeyedEntity, IEquatable<SchemaGroup>
     {
         /// <summary>
         /// Gets or Sets Id
         /// </summary>
         [DataMember(Name = "id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         /// <summary>
         /// Gets or Sets Description
         /// </summary>
         [DataMember(Name = "description")]
         public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or Sets Createdtimeutc
-        /// </summary>
-        [DataMember(Name = "createdtimeutc")]
-        public DateTime? Createdtimeutc { get; set; }
-
-        /// <summary>
-        /// Gets or Sets Updatedtimeutc
-        /// </summary>
-        [DataMember(Name = "updatedtimeutc")]
-        public DateTime? Updatedtimeutc { get; set; }
 
         /// <summary>
         /// Gets or Sets Format
@@ -71,6 +60,13 @@ namespace Archetypical.Software.SchemaRegistry.Shared.Models
         [JsonIgnore]
         public List<Schema> Schemas { get; set; }
 
+        [DataMember(Name = "Concurrency")]
+        public int Concurrency
+        {
+            get => GetHashCode();
+            set => _ = value;
+        }
+
         /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
@@ -81,8 +77,8 @@ namespace Archetypical.Software.SchemaRegistry.Shared.Models
             sb.Append("class SchemaGroup {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Description: ").Append(Description).Append("\n");
-            sb.Append("  Createdtimeutc: ").Append(Createdtimeutc).Append("\n");
-            sb.Append("  Updatedtimeutc: ").Append(Updatedtimeutc).Append("\n");
+            sb.Append("  Createdtimeutc: ").Append(CreatedTimeUtc).Append("\n");
+            sb.Append("  Updatedtimeutc: ").Append(ModifiedTimeUtc).Append("\n");
             sb.Append("  Format: ").Append(Format).Append("\n");
             sb.Append("  GroupProperties: ").Append(GroupProperties).Append("\n");
             sb.Append("}\n");
@@ -127,16 +123,6 @@ namespace Archetypical.Software.SchemaRegistry.Shared.Models
                     Description.Equals(other.Description)
                 ) &&
                 (
-                    Createdtimeutc == other.Createdtimeutc ||
-                    Createdtimeutc != null &&
-                    Createdtimeutc.Equals(other.Createdtimeutc)
-                ) &&
-                (
-                    Updatedtimeutc == other.Updatedtimeutc ||
-                    Updatedtimeutc != null &&
-                    Updatedtimeutc.Equals(other.Updatedtimeutc)
-                ) &&
-                (
                     Format == other.Format ||
                     Format != null &&
                     Format.Equals(other.Format)
@@ -162,10 +148,10 @@ namespace Archetypical.Software.SchemaRegistry.Shared.Models
                     hashCode = hashCode * 59 + Id.GetHashCode();
                 if (Description != null)
                     hashCode = hashCode * 59 + Description.GetHashCode();
-                if (Createdtimeutc != null)
-                    hashCode = hashCode * 59 + Createdtimeutc.GetHashCode();
-                if (Updatedtimeutc != null)
-                    hashCode = hashCode * 59 + Updatedtimeutc.GetHashCode();
+                if (CreatedTimeUtc != null)
+                    hashCode = hashCode * 59 + CreatedTimeUtc.GetHashCode();
+                if (ModifiedTimeUtc != null)
+                    hashCode = hashCode * 59 + ModifiedTimeUtc.GetHashCode();
                 if (Format != null)
                     hashCode = hashCode * 59 + Format.GetHashCode();
                 if (GroupProperties != null)

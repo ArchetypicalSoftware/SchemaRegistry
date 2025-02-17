@@ -3,12 +3,12 @@ using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 using Archetypical.Software.SchemaRegistry.Shared.Enums;
+using Archetypical.Software.Vega.Api.Abstractions;
 
 namespace Archetypical.Software.SchemaRegistry.Shared.Models
 {
-    public class Schema
+    public class Schema : GuidKeyedEntity
     {
-        public string Id { get; set; }
         public string Contents { get; set; }
         public int? Version { get; set; }
 
@@ -16,9 +16,6 @@ namespace Archetypical.Software.SchemaRegistry.Shared.Models
         /// This is either inherited from the schema group or applied when the schema group has a null value
         /// </summary>
         public Format? Format { get; set; }
-
-        public DateTime CreateDateTimeUtc { get; set; }
-        public DateTime LastUpdateDateTimeUtc { get; set; }
 
         public string Hash
         {

@@ -23,7 +23,7 @@ using Archetypical.Software.SchemaRegistry.Shared.Data;
 using Archetypical.Software.SchemaRegistry.Shared.Enums;
 using Archetypical.Software.SchemaRegistry.Shared.Interfaces;
 using Archetypical.Software.SchemaRegistry.Shared.Models;
-using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -60,7 +60,7 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
         [ValidateModelState]
         [SwaggerOperation("CreateSchema")]
         [SwaggerResponse(statusCode: 200, type: typeof(Schema), description: "OK")]
-        public virtual async Task<IActionResult> CreateSchema([FromRoute][Required] string groupId, [FromRoute][Required] string schemaId)
+        public virtual async Task<IActionResult> CreateSchema([FromRoute][Required] string groupId, [FromRoute][Required] Guid schemaId)
         {
             // Get the schema group
 
@@ -92,10 +92,10 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
             var schema = new Schema()
             {
                 Contents = body,
-                CreateDateTimeUtc = DateTime.UtcNow,
+                CreatedTimeUtc = DateTime.UtcNow,
                 Id = schemaId,
                 Format = (any.Format ?? any.ChildFormat),
-                LastUpdateDateTimeUtc = DateTime.UtcNow,
+                ModifiedTimeUtc = DateTime.UtcNow,
                 SchemaGroupId = groupId,
                 Version = 1
             };

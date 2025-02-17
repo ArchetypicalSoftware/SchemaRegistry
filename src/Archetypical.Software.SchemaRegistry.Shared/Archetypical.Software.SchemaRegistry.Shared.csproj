@@ -1,16 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Apache.Avro" Version="1.10.2" />
+    <PackageReference Include="Apache.Avro" Version="1.12.0" />
+    <PackageReference Include="Archetypical.Software.Vega.Api.Abstractions" Version="1.0.5" />
     <PackageReference Include="Froto.Parser" Version="0.7.2" />
-    <PackageReference Include="JsonSchema.Net" Version="1.9.3" />
-    <PackageReference Include="Macross.Json.Extensions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
-    <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.2.3" />
+    <PackageReference Include="JsonSchema.Net" Version="7.3.3" />
+    <PackageReference Include="Macross.Json.Extensions" Version="3.0.0" /> 
+    <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.6.23" />
   </ItemGroup>
 </Project>

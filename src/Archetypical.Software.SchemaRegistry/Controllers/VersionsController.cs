@@ -74,7 +74,7 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
         [SwaggerOperation("GetSchemaVersion")]
         [SwaggerResponse(statusCode: 200, type: typeof(string), description: "OK")]
         public virtual async Task<IActionResult> GetSchemaVersion([FromRoute][Required] string groupId,
-            [FromRoute][Required] string schemaId, [FromRoute][Required] int? versionNumber)
+            [FromRoute][Required] Guid schemaId, [FromRoute][Required] int? versionNumber)
         {
             var schema = await _context.Schemata.Where(x => x.SchemaGroupId == groupId && x.Id == schemaId && x.Version == versionNumber)
                 .FirstOrDefaultAsync();
@@ -84,7 +84,7 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
             var group = await _context.SchemaGroups.FirstAsync(x => x.Id == groupId);
             Response.Headers.Add("Location",
                 Url.Action("GetSchemaVersion", "Versions", new { groupId, schemaId, versionnumber = schema.Version }));
-            Response.Headers.Add("Schema-Id", schemaId);
+            Response.Headers.Add("Schema-Id", schemaId.ToString());
             Response.Headers.Add("Schema-Id-Location",
                 Url.Action("GetLatestSchema", "Schemas", new { groupId, schemaId }));
             Response.Headers.Add("Schema-Version", schema.Version.ToString());
@@ -110,7 +110,7 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
         [SwaggerOperation("GetSchemaVersions")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<int?>), description: "OK")]
         public virtual async Task<IActionResult> GetSchemaVersions([FromRoute][Required] string groupId,
-            [FromRoute][Required] string schemaId)
+            [FromRoute][Required] Guid schemaId)
         {
             var schema = await _context.Schemata
                 .Where(x => x.SchemaGroupId == groupId && x.Id == schemaId)

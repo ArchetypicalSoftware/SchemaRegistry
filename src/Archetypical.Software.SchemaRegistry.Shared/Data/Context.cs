@@ -1,14 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Archetypical.Software.SchemaRegistry.Shared.Models;
+using Archetypical.Software.Vega.Api.Abstractions;
+using Microsoft.Extensions.Configuration;
 
 namespace Archetypical.Software.SchemaRegistry.Shared.Data
 {
-    public class Context : DbContext
+    public class Context(DbContextOptions<VegaDbContext> options, IConfiguration config)
+        :
+            VegaDbContext(options, config)
     {
-        public Context(DbContextOptions<Context> options) : base(options)
-        {
-        }
-
         public DbSet<SchemaGroup> SchemaGroups { get; set; }
 
         public DbSet<Schema> Schemata { get; set; }
