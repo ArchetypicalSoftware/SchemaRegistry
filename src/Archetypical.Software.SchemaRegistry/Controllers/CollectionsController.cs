@@ -8,6 +8,6 @@ namespace Archetypical.Software.SchemaRegistry.Controllers;
 
 public class CollectionsController(
     ILogger<GenericApiController<SchemaCollection, Context>> logger,
-    DbContext context)
-    : Archetypical.Software.Vega.Api.Abstractions.GenericApiController<
+    Context context)
+    : GenericApiController<
         SchemaCollection, Context>(logger, context);
