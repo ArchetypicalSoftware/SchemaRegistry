@@ -5,25 +5,25 @@ using Microsoft.Extensions.Configuration;
 
 namespace Archetypical.Software.SchemaRegistry.Shared.Data
 {
-    public class Context(DbContextOptions<VegaDbContext> options, IConfiguration config)
-        :
-            VegaDbContext(options, config)
+    public class Context(DbContextOptions<VegaDbContext> options, IConfiguration config) : VegaDbContext(options, config)
     {
-        public DbSet<SchemaGroup> SchemaGroups { get; set; }
+        public DbSet<SchemaCollection> Collections { get; set; }
+        public DbSet<Schema> Schemas { get; set; }
 
-        public DbSet<Schema> Schemata { get; set; }
+        public DbSet<SchemaVersion> Versions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SchemaGroup>(x =>
+            modelBuilder.Entity<Schema>(x =>
             {
                 x.HasMany(sc => sc.Schemas)
                     .WithOne(x => x.SchemaGroup)
                     .HasForeignKey(x => x.SchemaGroupId);
-                x.Ignore(x => x.GroupProperties);
+                x.Ignore(x => x.SchemaProperties);
+                x.HasOne(y => y.SchemaCollection).WithMany(y => y.Schemas).HasForeignKey(y => y.SchemaCollectionId);
             });
 
-            modelBuilder.Entity<Schema>(x =>
+            modelBuilder.Entity<SchemaVersion>(x =>
             {
                 x.HasKey(s => new { s.Id, s.SchemaGroupId, s.Version });
             });

@@ -30,7 +30,7 @@
         ]
       }
     },
-    "/schemagroups/{group-id}": {
+    "/collections/{group-id}": {
       "parameters": [
         {
           "name": "group-id",
@@ -116,7 +116,7 @@
         ]
       }
     },
-    "/schemagroups/{group-id}/schemas": {
+    "/collections/{group-id}/schemas": {
       "parameters": [
         {
           "name": "group-id",
@@ -171,7 +171,7 @@
         }
       }
     },
-    "/schemagroups/{group-id}/schemas/{schema-id}": {
+    "/collections/{group-id}/schemas/{schema-id}": {
       "parameters": [
         {
           "name": "group-id",
@@ -248,7 +248,7 @@
         ]
       }
     },
-    "/schemagroups/{group-id}/schemas/{schema-id}/versions": {
+    "/collections/{group-id}/schemas/{schema-id}/versions": {
       "parameters": [
         {
           "name": "group-id",
@@ -293,7 +293,7 @@
         ]
       }
     },
-    "/schemagroups/{group-id}/schemas/{schema-id}/versions/{version-number}": {
+    "/collections/{group-id}/schemas/{schema-id}/versions/{version-number}": {
       "parameters": [
         {
           "name": "group-id",

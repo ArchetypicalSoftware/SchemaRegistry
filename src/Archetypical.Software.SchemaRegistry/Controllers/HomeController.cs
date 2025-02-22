@@ -1,9 +1,7 @@
 using System;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,26 +27,31 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
         public async Task<IActionResult> Index(int? page, int? size)
         {
             var groups = await _context
-                .SchemaGroups
+                .Collections
                 .OrderBy(x => x.Id)
                 .Skip(page.GetValueOrDefault(0) * size.GetValueOrDefault(10))
-                .Take(size.GetValueOrDefault(10)).ToListAsync();
+                .Take(size.GetValueOrDefault(10))
+                .Include(x => x.Schemas)
+                .Select(x => new HomeViewModel()
+                {
+                    Collection = x,
+                })
+                .ToListAsync();
 
             return View(groups);
         }
 
-        [HttpGet("SchemaGroups/{id}/Schema/{schemaId}")]
-        public async Task<IActionResult> Schema(string id, Guid schemaId, int? version)
+        public async Task<IActionResult> Schema(Guid id, Guid schemaId, int? version)
         {
-            Schema model = null;
+            SchemaVersion model = null;
             if (version.HasValue)
             {
-                model = await _context.Schemata.FirstOrDefaultAsync(x =>
+                model = await _context.Versions.FirstOrDefaultAsync(x =>
                     x.SchemaGroupId == id && x.Id == schemaId && x.Version == version);
             }
             else
             {
-                model = await _context.Schemata.Where(x =>
+                model = await _context.Versions.Where(x =>
                         x.SchemaGroupId == id && x.Id == schemaId)
                     .OrderByDescending(x => x.Version)
                     .FirstOrDefaultAsync();
@@ -56,9 +59,9 @@ namespace Archetypical.Software.SchemaRegistry.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Diff(string id, Guid schemaId, int version, int previousVersion)
+        public async Task<IActionResult> Diff(Guid id, Guid schemaId, int version, int previousVersion)
         {
-            var model = await _context.Schemata
+            var model = await _context.Versions
                 .Where(x => x.SchemaGroupId == id && x.Id == schemaId && x.Version == version)
                 .Select(x => x.Format)
                 .FirstOrDefaultAsync();

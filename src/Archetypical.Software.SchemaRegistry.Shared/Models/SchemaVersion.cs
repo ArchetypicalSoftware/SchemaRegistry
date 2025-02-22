@@ -1,0 +1,41 @@
+using System;
+using System.Runtime.Serialization;
+using System.Security.Cryptography;
+using System.Text;
+using Archetypical.Software.SchemaRegistry.Shared.Enums;
+using Archetypical.Software.Vega.Api.Abstractions;
+
+namespace Archetypical.Software.SchemaRegistry.Shared.Models
+{
+    public class SchemaVersion : GuidKeyedEntity
+    {
+        public string? Name { get; set; }
+        public string Contents { get; set; }
+        public int? Version { get; set; }
+
+        /// <summary>
+        /// This is either inherited from the schema group or applied when the schema group has a null value
+        /// </summary>
+        public Format? Format { get; set; }
+
+        public string Hash
+        {
+            get
+            {
+                var Sb = new StringBuilder();
+
+                using var hash = SHA256.Create();
+                var enc = Encoding.UTF8;
+                var result = hash.ComputeHash(enc.GetBytes(Contents));
+                foreach (var b in result)
+                    Sb.Append(b.ToString("x2"));
+                return Sb.ToString();
+            }
+            set { }
+        }
+
+        public Guid SchemaGroupId { get; set; }
+
+        public Schema SchemaGroup { get; set; }
+    }
+}

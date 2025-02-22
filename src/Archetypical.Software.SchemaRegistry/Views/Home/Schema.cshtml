@@ -1,8 +1,8 @@
 @using Archetypical.Software.SchemaRegistry.Shared.Enums
-@model Archetypical.Software.SchemaRegistry.Shared.Models.Schema;
+@model Archetypical.Software.SchemaRegistry.Shared.Models.SchemaVersion;
 @{
 
-    ViewData["Title"] = $"{Model.Id} -v{Model.Version}";
+    ViewData["Title"] = $"{Model.Name ?? Model.Id.ToString()} -v{Model.Version}";
 
 }
 
